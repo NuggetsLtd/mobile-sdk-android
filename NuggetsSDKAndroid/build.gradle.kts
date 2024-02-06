@@ -45,7 +45,7 @@ dependencies {
     // load third-party dependencies
     File("${rootDir}/NuggetsSDKAndroid/libs.txt").forEachLine { implementation("$it") }
     
-    implementation("com.github.NuggetsLtd:mobile-sdk-android-libs:v0.0.1")
+    implementation("com.github.NuggetsLtd:mobile-sdk-android-libs:0.0.11")
 }
 
 publishing {
