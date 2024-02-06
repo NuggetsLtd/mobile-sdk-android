@@ -1,6 +1,7 @@
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
+    id("maven-publish")
 }
 
 android {
@@ -12,7 +13,6 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
-        targetSdk = 34
     }
 
     buildTypes {
@@ -46,4 +46,14 @@ dependencies {
     File("${rootDir}/NuggetsSDKAndroid/libs.txt").forEachLine { implementation("$it") }
     
     implementation("com.github.NuggetsLtd:mobile-sdk-android-libs:v0.0.1")
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("maven") {
+            groupId = "life.nuggets.nuggetssdkandroid"
+            artifactId = "NuggetsSDKAndroid"
+            version = "0.0.3"
+        }
+    }
 }
