@@ -12,6 +12,7 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
+        targetSdk = 34
     }
 
     buildTypes {
@@ -28,8 +29,9 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
+    buildToolsVersion = "34.0.0"
 }
 
 dependencies {
