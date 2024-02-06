@@ -1,4 +1,4 @@
-package life.nuggets.nuggetssdk
+package life.nuggets.nuggetssdkandroid
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -19,6 +19,6 @@ class ExampleInstrumentedTest {
     fun useAppContext() {
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        assertEquals("life.nuggets.nuggetssdk.test", appContext.packageName)
+        assertEquals("life.nuggets.nuggetssdkandroid.test", appContext.packageName)
     }
 }

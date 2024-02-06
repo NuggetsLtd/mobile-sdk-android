@@ -17,4 +17,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "MobileSDKAndroid"
 include(":app")
-include(":NuggetsSDK")
+include(":NuggetsSDKAndroid")

@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "life.nuggets.nuggetssdk"
+    namespace = "life.nuggets.nuggetssdkandroid"
     compileSdk = 34
 
     defaultConfig {
@@ -24,8 +24,8 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
         jvmTarget = "1.8"
@@ -40,11 +40,8 @@ dependencies {
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
 
-    String str = new File("${rootDir}/NuggetsSDK/libs.txt").getText("UTF-8")
-    List libs = str.tokenize("\n")
-    libs.each {
-        api it
-    }
+    // load third-party dependencies
+    File("${rootDir}/NuggetsSDKAndroid/libs.txt").forEachLine { implementation("$it") }
     
-    implementation 'com.github.NuggetsLtd:mobile-sdk-android-libs:v0.0.1'
+    implementation("com.github.NuggetsLtd:mobile-sdk-android-libs:v0.0.1")
 }
