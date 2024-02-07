@@ -43,9 +43,9 @@ dependencies {
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
 
     // load third-party dependencies
-    File("${rootDir}/NuggetsSDKAndroid/libs.txt").forEachLine { implementation("$it") }
+    File("${rootDir}/NuggetsSDKAndroid/libs.txt").forEachLine { api("$it") }
     
-    implementation("com.github.NuggetsLtd:mobile-sdk-android-libs:v0.0.16")
+    api("com.github.NuggetsLtd:mobile-sdk-android-libs:v0.0.16")
 }
 
 publishing {
