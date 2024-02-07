@@ -45,7 +45,7 @@ dependencies {
     // load third-party dependencies
     File("${rootDir}/NuggetsSDKAndroid/libs.txt").forEachLine { implementation("$it") }
     
-    implementation("com.github.NuggetsLtd:mobile-sdk-android-libs:v0.0.15")
+    implementation("com.github.NuggetsLtd:mobile-sdk-android-libs:v0.0.16")
 }
 
 publishing {
@@ -53,7 +53,7 @@ publishing {
         create<MavenPublication>("maven") {
             groupId = "life.nuggets.nuggetssdkandroid"
             artifactId = "NuggetsSDKAndroid"
-            version = "0.0.15"
+            version = "0.0.16"
         }
     }
 }
