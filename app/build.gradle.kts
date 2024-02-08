@@ -1,6 +1,7 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("maven-publish")
 }
 
 android {
@@ -45,4 +46,14 @@ android {
 
 dependencies {
     implementation(project(":NuggetsSDKAndroid"))
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("maven") {
+            groupId = "life.nuggets.mobilesdkandroid"
+            artifactId = "MobileSDKAndroid"
+            version = "0.0.19"
+        }
+    }
 }
