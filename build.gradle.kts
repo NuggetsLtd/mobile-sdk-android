@@ -11,7 +11,7 @@ plugins {
 //         create<MavenPublication>("maven") {
 //             groupId = "life.nuggets.XXX"
 //             artifactId = "MobileSDKAndroid"
-//             version = "0.0.24"
+//            version = "0.0.25"
 //         }
 //     }
 // }

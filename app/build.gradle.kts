@@ -53,7 +53,7 @@ dependencies {
 //         create<MavenPublication>("maven") {
 //             groupId = "life.nuggets.mobilesdkandroid"
 //             artifactId = "MobileSDKAndroid"
-//             version = "0.0.24"
+//            version = "0.0.25"
 //         }
 //     }
 // }
