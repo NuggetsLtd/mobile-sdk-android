@@ -53,7 +53,7 @@ publishing {
         create<MavenPublication>("maven") {
             groupId = "life.nuggets.mobilesdkandroid"
             artifactId = "MobileSDKAndroid"
-            version = "0.0.20"
+            version = "0.0.21"
         }
     }
 }
