@@ -8,7 +8,7 @@ install:
       
       mvn install:install-file \
         -Dfile=$lib \
-        -DgroupId=life.nuggets.nuggetssdk \
+        -DgroupId=life.nuggets.nuggetssdkandroid \
         -DartifactId=$libName \
         -Dversion=$VERSION \
         -Dpackaging=aar \
