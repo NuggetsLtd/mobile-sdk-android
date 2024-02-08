@@ -6,12 +6,12 @@ plugins {
     id("maven-publish")
 }
 
-publishing {
-    publications {
-        create<MavenPublication>("maven") {
-            groupId = "life.nuggets.XXX"
-            artifactId = "MobileSDKAndroid"
-            version = "0.0.24"
-        }
-    }
-}
+// publishing {
+//     publications {
+//         create<MavenPublication>("maven") {
+//             groupId = "life.nuggets.XXX"
+//             artifactId = "MobileSDKAndroid"
+//             version = "0.0.24"
+//         }
+//     }
+// }
