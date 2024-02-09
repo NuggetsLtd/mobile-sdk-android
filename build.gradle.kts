@@ -11,7 +11,7 @@ publishing {
         register<MavenPublication>("release") {
             groupId = "life.nuggets.nuggetssdkandroid"
             artifactId = "MobileSDKAndroid"
-            version = "0.0.25"
+            version = "0.0.26"
 
             afterEvaluate {
                 from(components["release"])
