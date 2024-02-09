@@ -6,12 +6,16 @@ plugins {
     id("maven-publish")
 }
 
-// publishing {
-//     publications {
-//         create<MavenPublication>("maven") {
-//             groupId = "life.nuggets.XXX"
-//             artifactId = "MobileSDKAndroid"
-//            version = "0.0.25"
-//         }
-//     }
-// }
+publishing {
+    publications {
+        register<MavenPublication>("release") {
+            groupId = "life.nuggets.nuggetssdkandroid"
+            artifactId = "MobileSDKAndroid"
+            version = "0.0.25"
+
+            afterEvaluate {
+                from(components["release"])
+            }
+        }
+    }
+}
