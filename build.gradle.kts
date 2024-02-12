@@ -8,13 +8,13 @@ plugins {
 
 publishing {
     publications {
-        register<MavenPublication>("release") {
+        register<MavenPublication>("maven") {
             groupId = "life.nuggets.nuggetssdkandroid"
             artifactId = "MobileSDKAndroid"
             version = "0.0.27"
 
             afterEvaluate {
-                from(components["release"])
+                from(components["maven"])
             }
         }
     }
