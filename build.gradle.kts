@@ -5,15 +5,3 @@ plugins {
     id("com.android.library") version "8.2.2" apply false
     id("maven-publish")
 }
-
-publishing {
-    publications {
-        create<MavenPublication>("maven") {
-            groupId = "life.nuggets.nuggetssdkandroid"
-            artifactId = "MobileSDKAndroid"
-            version = "0.0.29"
-
-            from(components["java"])
-        }
-    }
-}

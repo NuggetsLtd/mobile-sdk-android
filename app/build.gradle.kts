@@ -19,9 +19,6 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
-        aarMetadata {
-            minCompileSdk = 24
-        }
     }
 
     buildTypes {
@@ -45,36 +42,14 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
-    publishing {
-        multipleVariants {
-            allVariants()
-            withJavadocJar()
-        }
-    }
+    // publishing {
+    //     multipleVariants {
+    //         allVariants()
+    //         withJavadocJar()
+    //     }
+    // }
 }
 
 dependencies {
     implementation(project(":NuggetsSDKAndroid"))
 }
-
-publishing {
-    publications {
-        create<MavenPublication>("maven") {
-            groupId = "life.nuggets.nuggetssdkandroid"
-            artifactId = "MobileSDKAndroid"
-            version = "0.0.29"
-
-            from(components["java"])
-        }
-    }
-}
-
-// publishing {
-//     publications {
-//         create<MavenPublication>("maven") {
-//             groupId = "life.nuggets.mobilesdkandroid"
-//             artifactId = "MobileSDKAndroid"
-//            version = "0.0.29"
-//         }
-//     }
-// }
