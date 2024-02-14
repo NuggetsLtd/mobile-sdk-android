@@ -5,3 +5,6 @@ plugins {
     id("com.android.library") version "8.2.2" apply false
     id("maven-publish")
 }
+
+group = "life.nuggets"
+version = "0.0.30"
