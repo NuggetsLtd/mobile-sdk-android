@@ -44,5 +44,5 @@ dependencies {
     // load third-party dependencies
     File("${rootDir}/sdk/libs.txt").forEachLine { api("$it") }
     
-    api("com.github.NuggetsLtd:mobile-sdk-android-libs:v0.0.63")
+    api("com.github.NuggetsLtd:mobile-sdk-android-libs:v0.0.67")
 }
