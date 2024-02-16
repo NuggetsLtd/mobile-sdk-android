@@ -10,7 +10,7 @@
         android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
     >
         <activity
-            android:name=".NuggetsSDKActivity"
+            android:name=".MainActivity"
             android:exported="true"
         >
             <intent-filter>
