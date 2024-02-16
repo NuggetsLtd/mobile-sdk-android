@@ -6,5 +6,12 @@ plugins {
     id("maven-publish")
 }
 
+buildscript {
+    dependencies {
+        classpath("com.android.tools.build:gradle:4.2.1")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.7.20")
+    }
+}
+
 group = "life.nuggets"
             version = "0.0.62"
