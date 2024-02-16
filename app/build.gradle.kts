@@ -40,5 +40,5 @@ android {
 }
 
 dependencies {
-    implementation(project(":NuggetsSDKAndroid"))
+    api(project(":NuggetsSDKAndroid"))
 }
