@@ -1,7 +1,7 @@
 package life.nuggets.mobilesdkandroid
 
-import life.nuggets.nuggetssdk.NuggetsSDKActivity
+import life.nuggets.nuggetssdk.NuggetsSDKActivity as NuggetsActivity
 
-class MainActivity : NuggetsSDKActivity() {
+class NuggetsSDKActivity : NuggetsActivity() {
 
 }
