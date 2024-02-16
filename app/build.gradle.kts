@@ -1,5 +1,5 @@
 plugins {
-    id("com.android.application")
+    id("com.android.library")
     id("org.jetbrains.kotlin.android")
     id("maven-publish")
 }
@@ -36,5 +36,5 @@ android {
 }
 
 dependencies {
-    implementation(project(":sdk"))
+    api(project(":sdk"))
 }
