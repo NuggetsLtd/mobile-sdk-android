@@ -43,10 +43,10 @@ dependencies {
     api("androidx.core:core-ktx:1.12.0")
     api("androidx.appcompat:appcompat:1.6.1")
     api("com.google.android.material:material:1.11.0")
-    
+
     // load third-party dependencies
     File("${rootDir}/NuggetsSDKAndroid/libs.txt").forEachLine { api("$it") }
     
-    api("com.github.NuggetsLtd:mobile-sdk-android-libs:v0.0.59")
+    api("com.github.NuggetsLtd:mobile-sdk-android-libs:v0.0.63")
     // api(project(":NuggetsSDKAndroid"))
 }
