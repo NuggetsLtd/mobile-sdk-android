@@ -14,4 +14,4 @@ buildscript {
 }
 
 group = "life.nuggets"
-            version = "0.0.65"
+            version = "0.0.66"

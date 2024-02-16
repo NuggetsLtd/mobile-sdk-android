@@ -1,0 +1,3 @@
+com.facebook.react:react-android:0.73.2
+com.facebook.react:flipper-integration:0.73.2
+com.facebook.react:hermes-android:0.73.2
