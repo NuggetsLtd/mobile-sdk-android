@@ -1,4 +1,4 @@
-package life.nuggets.nuggetssdkandroid
+package life.nuggets.sdk
 
 import org.junit.Test
 

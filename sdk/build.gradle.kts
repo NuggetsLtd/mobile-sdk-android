@@ -1,18 +1,11 @@
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
-    id("maven-publish")
 }
 
 android {
-    namespace = "life.nuggets.nuggetssdkandroid"
+    namespace = "life.nuggets.sdk"
     compileSdk = 34
-    buildToolsVersion = "34.0.0"
-
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
-    }
 
     defaultConfig {
         minSdk = 24
@@ -30,19 +23,26 @@ android {
             )
         }
     }
-    
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+    }
     kotlinOptions {
-        jvmTarget = "17"
+        jvmTarget = "1.8"
     }
 }
 
 dependencies {
+
     api("androidx.core:core-ktx:1.12.0")
     api("androidx.appcompat:appcompat:1.6.1")
     api("com.google.android.material:material:1.11.0")
+    testImplementation("junit:junit:4.13.2")
+    androidTestImplementation("androidx.test.ext:junit:1.1.5")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
 
     // load third-party dependencies
-    File("${rootDir}/NuggetsSDKAndroid/libs.txt").forEachLine { api("$it") }
+    File("${rootDir}/sdk/libs.txt").forEachLine { api("$it") }
     
-    api("com.github.NuggetsLtd:mobile-sdk-android-libs:v0.0.66")
+    api("com.github.NuggetsLtd:mobile-sdk-android-libs:v0.0.63")
 }
