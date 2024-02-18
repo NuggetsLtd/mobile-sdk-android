@@ -19,5 +19,18 @@ buildscript {
     }
 }
 
-group = "life.nuggets"
-            version = "0.0.68"
+// publishing {
+//     publications {
+//         create<MavenPublication>("release") {
+//             groupId = "life.nuggets"
+//             artifactId = "mobilesdk"
+//             version = "0.0.68"
+//             println("This is executed during the configuration phase.")
+
+//             afterEvaluate {
+//                 println("This is executed during the afterEvaludate phase.")
+//                 println(components)
+//             }
+//         }
+//     }
+// }

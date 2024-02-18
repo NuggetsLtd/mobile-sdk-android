@@ -38,3 +38,25 @@ android {
 dependencies {
     api(project(":sdk"))
 }
+
+publishing {
+    publications {
+        create<MavenPublication>("release") {
+            groupId = "life.nuggets"
+            artifactId = "mobilesdkandroid"
+            version = "0.0.68"
+            println("app: This is executed during the configuration phase.")
+
+            afterEvaluate {
+                println("app: This is executed during the afterEvaludate phase.")
+                println(components)
+                from(components["release"])
+
+                components.forEach { component ->
+                    println("Component")
+                    println(component.getName())
+                }
+            }
+        }
+    }
+}
