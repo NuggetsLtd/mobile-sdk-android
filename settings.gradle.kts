@@ -1,3 +1,6 @@
+include(":app")
+include(":sdk")
+
 pluginManagement {
     repositories {
         google()
@@ -17,5 +20,3 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "MobileSDKAndroid"
-include(":app")
-include(":sdk")
