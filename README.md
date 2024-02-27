@@ -27,3 +27,4 @@ class MainActivity : NuggetsSDKActivity() {
 
 }
 ```
+
