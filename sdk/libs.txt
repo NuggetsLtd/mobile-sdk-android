@@ -1,7 +1,7 @@
 com.facebook.react:react-android:0.73.4
 com.facebook.react:flipper-integration:0.73.4
 com.facebook.react:hermes-android:0.73.4
-NuggetsMobile:nuggetslife_react-native-amqp:unspecified
-NuggetsMobile:nuggetslife_react-native-nuggets:unspecified
-NuggetsMobile:react-native-randombytes:unspecified
-NuggetsMobile:react-native-tcp:unspecified
+NuggetsMobile:nuggetslife_react-native-amqp:0.0.76
+NuggetsMobile:nuggetslife_react-native-nuggets:0.0.76
+NuggetsMobile:react-native-randombytes:0.0.76
+NuggetsMobile:react-native-tcp:0.0.76
