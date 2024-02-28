@@ -1,7 +1,7 @@
 com.facebook.react:react-android:0.73.4
 com.facebook.react:flipper-integration:0.73.4
 com.facebook.react:hermes-android:0.73.4
-com.github.NuggetsLtd.mobile-sdk-android-libs:nuggetslife_react-native-amqp:v0.0.84
-com.github.NuggetsLtd.mobile-sdk-android-libs:nuggetslife_react-native-nuggets:v0.0.84
-com.github.NuggetsLtd.mobile-sdk-android-libs:react-native-randombytes:v0.0.84
-com.github.NuggetsLtd.mobile-sdk-android-libs:react-native-tcp:v0.0.84
+com.github.NuggetsLtd.mobile-sdk-android-libs:nuggetslife_react-native-amqp:v0.0.85
+com.github.NuggetsLtd.mobile-sdk-android-libs:nuggetslife_react-native-nuggets:v0.0.85
+com.github.NuggetsLtd.mobile-sdk-android-libs:react-native-randombytes:v0.0.85
+com.github.NuggetsLtd.mobile-sdk-android-libs:react-native-tcp:v0.0.85
