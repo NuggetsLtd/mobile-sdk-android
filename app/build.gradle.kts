@@ -10,7 +10,7 @@ android {
 
     defaultConfig {
         minSdk = 24
-
+        missingDimensionStrategy("react-native-camera", "general")
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary = true
@@ -44,7 +44,7 @@ publishing {
         create<MavenPublication>("release") {
             groupId = "life.nuggets"
             artifactId = "mobilesdkandroid"
-            version = "1.1.98"
+            version = "1.1.99"
             println("app: This is executed during the configuration phase.")
 
             afterEvaluate {

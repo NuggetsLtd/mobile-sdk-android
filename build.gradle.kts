@@ -11,6 +11,7 @@ buildscript {
         google()
         mavenCentral()
         maven { url = uri("https://jitpack.io") }
+        maven { url = uri("https://raw.githubusercontent.com/iProov/android/master/maven/")}
     }
 
     dependencies {
@@ -24,7 +25,7 @@ publishing {
         create<MavenPublication>("release") {
             groupId = "life.nuggets"
             artifactId = "mobilesdk"
-            version = "1.1.98"
+            version = "1.1.99"
             println("This is executed during the configuration phase.")
 
             afterEvaluate {
