@@ -45,7 +45,7 @@ dependencies {
     // load third-party dependencies
     File("${rootDir}/sdk/libs.txt").forEachLine { api("$it") }
     
-    api("com.github.NuggetsLtd:mobile-sdk-android-libs:v1.2.6")
+    api("com.github.NuggetsLtd:mobile-sdk-android-libs:v1.1.97")
 }
 
 publishing {
@@ -53,7 +53,7 @@ publishing {
         create<MavenPublication>("release") {
             groupId = "life.nuggets"
             artifactId = "sdk"
-            version = "1.2.6"
+            version = "1.1.97"
             println("sdk: This is executed during the configuration phase.")
 
             afterEvaluate {
