@@ -25,7 +25,7 @@ publishing {
         create<MavenPublication>("release") {
             groupId = "life.nuggets"
             artifactId = "mobilesdk"
-            version = "1.1.102"
+            version = "1.1.103"
             println("This is executed during the configuration phase.")
 
             afterEvaluate {
