@@ -10,7 +10,7 @@ Mobile (Android) SDK for interaction with the Nuggets Platform.
 This SDK provides an Identity Wallet for Self-Sovereign Identity (SSI).
 # Nuggets Mobile SDK – Android Full Integration Guide
 
-This document lists ALL changes needed to integrate the Nuggets Mobile SDK into a fresh Android host app. Use the Quick Integration guide if you only need basics.
+This document lists ALL changes needed to integrate the Nuggets Mobile SDK into a fresh Android host app.
 
 ---
 ## 1. Create a New Project
