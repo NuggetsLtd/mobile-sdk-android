@@ -13,6 +13,16 @@ This SDK provides an Identity Wallet for Self-Sovereign Identity (SSI).
 This document lists ALL changes needed to integrate the Nuggets Mobile SDK into a fresh Android host app.
 
 ---
+## 0. Overview & Architecture (Why These Steps Exist)
+- Delivery: The SDK is published via JitPack as a multi-module Gradle artifact (plus biometric/iProov components).
+- React Native Internals: Internally leverages React Native style modules; some transitive dependencies inflate method count (hence multidex + potential code shrinking considerations).
+- Presentation: You typically launch an exported SDK `Activity` (`NuggetsSDKActivity`) from your host UI.
+- Isolation: Keeping flows in a separate activity avoids polluting your navigation stack and eases lifecycle separation.
+- Permissions: Start broad while integrating; prune truly unused ancillary permissions; core camera + NFC + liveness permissions are REQUIRED.
+- Jetifier: Ensures legacy support libraries inside dependencies are migrated to AndroidX at build time.
+- Biometrics & Liveness: iProov repository IS REQUIRED for core Nuggets identity flows (do not remove).
+
+---
 ## 1. Create a New Project
 Android Studio → New Project → Empty Activity
 1. Name: `WrappingAppDemo` (example)
@@ -21,9 +31,11 @@ Android Studio → New Project → Empty Activity
 4. Language: Kotlin
 5. Finish
 
+(Why: API 24 keeps method count manageable while meeting modern TLS / security baseline; raising minSdk may further reduce multidex pressure.)
+
 ---
 ## 2. Add Required Repositories (Root `settings.gradle.kts`)
-Add JitPack (required) and iProov:
+Add JitPack (required) and iProov (REQUIRED – liveness dependency):
 ```kotlin
 // settings.gradle.kts
 pluginManagement {
@@ -32,7 +44,7 @@ pluginManagement {
         mavenCentral()
         gradlePluginPortal()
         maven("https://jitpack.io")
-        maven("https://raw.githubusercontent.com/iProov/android/master/maven/") // optional
+        maven("https://raw.githubusercontent.com/iProov/android/master/maven/") // REQUIRED for iProov liveness
     }
 }
 
@@ -42,28 +54,17 @@ dependencyResolutionManagement {
         google()
         mavenCentral()
         maven("https://jitpack.io")
-        maven("https://raw.githubusercontent.com/iProov/android/master/maven/") // remove if not using biometrics
+        maven("https://raw.githubusercontent.com/iProov/android/master/maven/") // do NOT remove – SDK depends on iProov
     }
 }
 
 rootProject.name = "WrappingAppDemo"
 include(":app")
 ```
-Groovy variant:
-```groovy
-pluginManagement {
-  repositories {
-    google(); mavenCentral(); gradlePluginPortal(); maven { url 'https://jitpack.io' }; maven { url 'https://raw.githubusercontent.com/iProov/android/master/maven/' }
-  }
-}
-
-dependencyResolutionManagement {
-  repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-  repositories {
-    google(); mavenCentral(); maven { url 'https://jitpack.io' }; maven { url 'https://raw.githubusercontent.com/iProov/android/master/maven/' }
-  }
-}
-```
+Groovy variant updated similarly.
+Why:
+- JitPack serves the Nuggets SDK artifacts directly from Git tags.
+- iProov feed required for mandatory liveness / biometric flows.
 
 ---
 ## 3. `gradle.properties`
@@ -72,6 +73,15 @@ Ensure Jetifier is enabled (helps with some transitive AndroidX migrations):
 android.enableJetifier=true
 ```
 (If already present in a corporate standards file, do not duplicate.)
+
+Recommended additional hardening toggles (optional – enable later once integrated):
+```
+org.gradle.jvmargs=-Xmx4g -Dfile.encoding=UTF-8
+android.defaults.buildfeatures.buildconfig=true
+android.nonTransitiveRClass=true
+# Enable if you want faster incremental builds (requires plugin 8+)
+android.defaults.buildfeatures.resvalues=true
+```
 
 ---
 ## 4. Module Theme Setup (`app/src/main/res/values/themes.xml`)
@@ -95,7 +105,7 @@ Then refine to Material 3 with basic color overrides:
     </style>
 </resources>
 ```
-Adjust colors to match host branding.
+Why: Ensure the SDK activity inherits predictable default theming; host can further override brand palette.
 
 ---
 ## 5. Android Manifest (`app/src/main/AndroidManifest.xml`)
@@ -121,7 +131,7 @@ Add only the permissions/features you actually need. Start broad, then prune:
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
-        android:name=".App"   <!-- optional if you add an Application class -->
+        android:name=".App"
         android:allowBackup="false"
         android:label="@string/app_name"
         android:theme="@style/Theme.WrappingAppDemo">
@@ -145,7 +155,22 @@ Add only the permissions/features you actually need. Start broad, then prune:
     </application>
 </manifest>
 ```
-Prune unused sensitive permissions before release (e.g. location if not required). For API 33+ request POST_NOTIFICATIONS at runtime.
+Prune only non-core sensitive permissions before release (e.g. location if not required). DO NOT remove CAMERA, NFC, RECORD_AUDIO, USE_BIOMETRIC / USE_FINGERPRINT – they are required for Nuggets SDK liveness + document flows.
+
+### 5.1 Permission Rationale Table
+| Permission | Needed For | Status |
+|------------|------------|--------|
+| INTERNET | Network calls | Required |
+| CAMERA | Document / face capture | Required |
+| RECORD_AUDIO | Liveness / iProov session (audio component) | Required |
+| USE_BIOMETRIC / USE_FINGERPRINT | Biometric auth convenience & fallback | Required |
+| NFC | Reading NFC-enabled IDs / ePassports | Required |
+| POST_NOTIFICATIONS | Out-of-app alerts (Android 13+) | Optional (remove if no notifications) |
+| FOREGROUND_SERVICE | Long-running secure tasks | Optional (keep if background actions used) |
+| WAKE_LOCK | Prevent sleep mid critical flow | Optional (profile necessity) |
+| ACCESS_COARSE/FINE_LOCATION | Geo-based verification | Optional (only if geo required) |
+| READ/WRITE_EXTERNAL_STORAGE | Legacy file writes | Optional (often removable >= API 33) |
+| DOWNLOAD_WITHOUT_NOTIFICATION | Silent asset fetch | Optional |
 
 ---
 ## 6. Module `build.gradle.kts` (App)
@@ -183,14 +208,22 @@ dependencies {
         exclude(group = "androidx.lifecycle")
         exclude(group = "com.github.NuggetsLtd.mobile-sdk-android-libs", module = "react-native-camera-mlkit")
     }
-
     implementation("com.facebook.conceal:conceal:1.1.3@aar")
 }
 ```
 Notes:
-- With minSdk 24 you do NOT need the `androidx.multidex:multidex` runtime dependency; just `multiDexEnabled = true`.
-- Remove `multiDexEnabled` only if you shrink & confirm method count < 64K (unlikely with RN + SDK).
-- Keep excludes unless you intentionally add those modules.
+- `multiDexEnabled`: Required due to transitive RN / crypto libs; remove only after R8 shrink audit shows <64K methods.
+- Excluding `react-native-camera-mlkit` reduces size if not using MLKit camera features.
+- Conceal provides lightweight encryption support needed by internal modules.
+- Keep pinned Compose BOM version to avoid mismatched runtime / compiler extension.
+
+### 6.1 Optional Build Optimizations
+Inside `android { }`:
+```kotlin
+packagingOptions { resources.excludes += "/META-INF/{AL2.0,LGPL2.1}" }
+buildTypes { release { isMinifyEnabled = true; proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro") } }
+```
+Enable only after initial integration to simplify first run debugging.
 
 ---
 ## 7. Example `MainActivity.kt`
@@ -254,9 +287,32 @@ class MainActivity : AppCompatActivity() {
 ```
 If the exported activity name differs (e.g. `NuggetsActivity`), use IDE auto-complete after syncing.
 
+Classic XML variant (if not using Compose):
+```kotlin
+class MainActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+        findViewById<Button>(R.id.launchButton).setOnClickListener {
+            startActivity(Intent(this, life.nuggets.nuggetssdk.NuggetsSDKActivity::class.java))
+        }
+    }
+}
+```
+
 ---
-## 8. Runtime Permissions
-Request at runtime for Camera, Audio, Notifications (API 33+), and potentially external storage (scoped storage changes may remove need). Sample minimal request (not shown here) should be implemented before launching flows needing them.
+## 8. Runtime Permissions (Strategy)
+Request at the moment of first use (core required capabilities must still be granted for SDK success).
+| Capability | Permissions (typical) | Request Timing | Required |
+|------------|-----------------------|----------------|----------|
+| Camera capture | CAMERA | Just before opening capture flow | Yes |
+| Audio / Liveness | RECORD_AUDIO | Before initiating liveness step | Yes |
+| Biometric auth | USE_BIOMETRIC / USE_FINGERPRINT | System prompt on auth screen | Yes (for full experience) |
+| NFC scanning | NFC | Prior to NFC scanning (no runtime dialog on many devices) | Yes |
+| Notifications | POST_NOTIFICATIONS (API 33+) | After user opt-in context screen | No |
+| Location (if used) | ACCESS_COARSE/FINE_LOCATION | On feature entry needing geo context | No |
+
+Gracefully handle denial: show rationale & give re-try path directing to App Settings when permanently denied.
 
 ---
 ## 9. Optional R8 / ProGuard Rules
@@ -267,7 +323,7 @@ Add if you enable minification and see class stripping issues:
 -keep class life.nuggets.** { *; }
 -dontwarn life.nuggets.**
 ```
-Refine once official ruleset is published.
+Refine once official ruleset is published. Avoid over-broad `-keep class **` which harms shrinking.
 
 ---
 ## 10. Validation Checklist
@@ -276,8 +332,10 @@ Refine once official ruleset is published.
 | Build sync | No unresolved dependencies |
 | Launch button | SDK Activity displays UI |
 | Orientation change | No crash / state restored |
-| Permissions | Requested only when needed |
+| Core permissions | CAMERA, RECORD_AUDIO, NFC, BIOMETRIC granted path tested |
+| Optional permissions | Not requested unless feature used |
 | Release (minify on) | No missing symbols |
+| Method count | Below 64K only if multidex removed |
 
 ---
 ## 11. Updating the SDK
@@ -285,10 +343,41 @@ Refine once official ruleset is published.
 2. Bump version in dependency line.
 3. Sync Gradle, rebuild.
 4. Regression test critical identity & NFC (if used) flows.
+Rollback: revert version line and sync again (Gradle caches prior artifacts).
 
 ---
 ## 12. Support
 Provide: SDK version, device model, Android version, reproduction steps, minimal Logcat excerpt.
 
 ---
-> Remove any permissions or repository endpoints not required by your deployment before submitting to production stores.
+## 13. Troubleshooting
+| Symptom | Likely Cause | Remedy |
+|---------|--------------|--------|
+| Activity not found | Dependency not synced / wrong artifact version | Re-sync Gradle; verify coordinate spelling |
+| Crash on launch (NoClassDefFoundError) | ProGuard/R8 removed class | Add `-keep` rule for missing package |
+| Permission denied crash | Runtime permission not requested | Add permission request flow before invoking SDK step |
+| Blank screen | Theme conflict / missing resources | Ensure using Material3 theme & no custom night mode override breaking RN surface |
+| Dex overflow without multidex | `multiDexEnabled` false | Re-enable multidex or shrink aggressively |
+| Slow cold start | Debug variant + no shrinking | Measure after enabling minify in release |
+
+---
+## 14. Production Hardening
+- Remove unused permissions (especially location, storage, notifications).
+- Enable R8 (`minifyEnabled true`) and verify no stripped classes.
+- Turn on Play Integrity / SafetyNet (if required by business logic outside SDK).
+- Monitor memory & jank (Android Studio Profiler) during identity flow.
+- Verify dark mode compatibility.
+- Add Crash / ANR monitoring (e.g., Firebase Crashlytics) around SDK entrypoints.
+
+---
+## 15. Quick Reference (Minimal Permission Set)
+Minimum REQUIRED for Nuggets SDK core flows (document + liveness + NFC):
+- INTERNET
+- CAMERA
+- RECORD_AUDIO
+- USE_BIOMETRIC (and/or USE_FINGERPRINT)
+- NFC
+(Optional: POST_NOTIFICATIONS, LOCATION, STORAGE, WAKE_LOCK, FOREGROUND_SERVICE, DOWNLOAD_WITHOUT_NOTIFICATION only if your product use-cases demand them.)
+
+---
+> Remove any OPTIONAL permissions or repository endpoints not required; retain CAMERA, NFC, RECORD_AUDIO, BIOMETRIC, iProov repository – they are mandatory for Nuggets SDK.
